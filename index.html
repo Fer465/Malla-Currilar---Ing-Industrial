@@ -157,6 +157,18 @@
     const contenedor = document.getElementById("contenedor");
     const cursoElements = {};
 
+    function calcularCreditosAprobados() {
+      let total = 0;
+      for (const semestre in malla) {
+        for (const curso of malla[semestre]) {
+          if (completados.has(curso.nombre)) {
+            total += curso.creditos;
+          }
+        }
+      }
+      return total;
+    }
+
     function renderMalla() {
       for (let i = 1; i <= 10; i++) {
         const col = document.createElement("div");
@@ -164,6 +176,8 @@
         const titulo = document.createElement("h2");
         titulo.textContent = `Semestre ${i}`;
         col.appendChild(titulo);
+
+        const electivos = malla[i]?.filter(c => c.tipo === "E") || [];
 
         (malla[i] || []).forEach(curso => {
           const div = document.createElement("div");
@@ -173,6 +187,20 @@
 
           div.addEventListener("click", () => {
             if (!div.classList.contains("desbloqueado")) return;
+
+            // Electivo: desmarcar otros
+            if (curso.tipo === "E") {
+              if (!div.classList.contains("aprobado")) {
+                electivos.forEach(c => {
+                  if (c.nombre !== curso.nombre) {
+                    const el = cursoElements[c.nombre];
+                    el.classList.remove("aprobado");
+                    completados.delete(c.nombre);
+                  }
+                });
+              }
+            }
+
             div.classList.toggle("aprobado");
             if (div.classList.contains("aprobado")) {
               completados.add(curso.nombre);
@@ -191,10 +219,17 @@
     }
 
     function actualizarDesbloqueo() {
+      const creditos = calcularCreditosAprobados();
       for (let semestre in malla) {
         malla[semestre].forEach(curso => {
           const div = cursoElements[curso.nombre];
-          const desbloqueado = curso.prerequisitos.every(pre => completados.has(pre));
+          const desbloqueado = curso.prerequisitos.every(pre => {
+            if (pre.includes("créditos")) {
+              const match = pre.match(/(\d+)/);
+              return creditos >= parseInt(match[1]);
+            }
+            return completados.has(pre);
+          });
           if (desbloqueado && !div.classList.contains("aprobado")) {
             div.classList.add("desbloqueado");
             div.style.cursor = "pointer";
@@ -209,4 +244,6 @@
     renderMalla();
   </script>
 </body>
+</html>
+
 </html>
