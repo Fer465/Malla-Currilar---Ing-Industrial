@@ -31,7 +31,7 @@
       display: block;
       width: 100%;
       text-align: left;
-      background-color: #fcd6ea;
+      background-color: #fcd6ea; /* rosa disponible */
       border: 2px solid #f5a4d1;
       border-radius: 8px;
       padding: 0.5rem 1rem;
@@ -40,10 +40,13 @@
       transition: background-color 0.3s ease;
     }
     .course-button.locked {
-      background-color: #eee;
+      background-color: #eee !important;
       border-color: #ccc;
       color: #999;
       cursor: not-allowed;
+    }
+    .course-button.completed {
+      background-color: #d0f0ff !important; /* celeste pastel */
     }
   </style>
 </head>
@@ -53,97 +56,16 @@
 
   <script>
     const __DATA__ = {
-      "1": [
-        {"nombre":"Introducción a la Ingeniería Industrial","prerequisitos":[]},
-        {"nombre":"Matemática","prerequisitos":[]},
-        {"nombre":"Cálculo","prerequisitos":[]},
-        {"nombre":"Dibujo Industrial I","prerequisitos":[]},
-        {"nombre":"Identidad y Peruanidad","prerequisitos":[]},
-        {"nombre":"Taller de Argumentación","prerequisitos":[]},
-        {"nombre":"Taller de Artes","prerequisitos":[]}
-      ],
-      "2": [
-        {"nombre":"Cálculo Integral","prerequisitos":["Cálculo"]},
-        {"nombre":"Dibujo Industrial II","prerequisitos":["Dibujo Industrial I"]},
-        {"nombre":"Química General","prerequisitos":[]},
-        {"nombre":"Física","prerequisitos":[]},
-        {"nombre":"Taller de Deportes","prerequisitos":[]},
-        {"nombre":"Taller de Lectura y Redacción","prerequisitos":[]}
-      ],
-      "3": [
-        {"nombre":"Física II","prerequisitos":["Física"]},
-        {"nombre":"Cálculo Vectorial","prerequisitos":["Cálculo Integral"]},
-        {"nombre":"Ingeniería de Organización Industrial","prerequisitos":[]},
-        {"nombre":"Ciencias e Ingeniería de Materiales","prerequisitos":[]},
-        {"nombre":"Metodología del Trabajo Universitario","prerequisitos":[]},
-        {"nombre":"Responsabilidad Ciudadana y Ecología","prerequisitos":[]}
-      ],
-      "4": [
-        {"nombre":"Procesos Industriales I","prerequisitos":["Ciencias e Ingeniería de Materiales"]},
-        {"nombre":"Termodinámica","prerequisitos":["Química General"]},
-        {"nombre":"Electrotecnia Industrial","prerequisitos":["Física II"]},
-        {"nombre":"Estadística y Probabilidades","prerequisitos":["Matemática"]},
-        {"nombre":"Innovación en Ingeniería","prerequisitos":["Metodología del Trabajo Universitario"]},
-        {"nombre":"Taller de Bienestar y Felicidad","prerequisitos":[]},
-        {"nombre":"Taller de Coaching y Liderazgo","prerequisitos":[]},
-        {"nombre":"Taller de Inteligencia Emocional","prerequisitos":[]}
-      ],
-      "5": [
-        {"nombre":"Procesos Industriales II","prerequisitos":["Procesos Industriales I"]},
-        {"nombre":"Estudio del Trabajo","prerequisitos":["Introducción a la Ingeniería Industrial"]},
-        {"nombre":"Computación Aplicada","prerequisitos":["50 créditos aprobados"]},
-        {"nombre":"Filosofía y Ética","prerequisitos":[]},
-        {"nombre":"Ingeniería de Costos y Presupuestos","prerequisitos":["Ingeniería de Organización Industrial"]},
-        {"nombre":"Ingeniería Económica","prerequisitos":["55 créditos aprobados"]}
-      ],
-      "6": [
-        {"nombre":"Sistemas de Organizaciones Industriales","prerequisitos":["60 créditos aprobados"]},
-        {"nombre":"Estadística Aplicada a la Ingeniería Industrial","prerequisitos":["Estadística y Probabilidades"]},
-        {"nombre":"Ingeniería de Plantas","prerequisitos":["Estudio del Trabajo"]},
-        {"nombre":"Investigación Operativa I","prerequisitos":["Cálculo Vectorial"]},
-        {"nombre":"Metodología de la Investigación en Ingeniería","prerequisitos":["Innovación en Ingeniería"]},
-        {"nombre":"Tecnologías de Información","prerequisitos":["60 créditos aprobados"]}
-      ],
-      "7": [
-        {"nombre":"Control de Procesos","prerequisitos":["Estadística Aplicada a la Ingeniería Industrial"]},
-        {"nombre":"Marketing Industrial","prerequisitos":["100 créditos aprobados"]},
-        {"nombre":"Seguridad y Salud Ocupacional","prerequisitos":["Sistemas de Organizaciones Industriales"]},
-        {"nombre":"Ergonomía","prerequisitos":["100 créditos aprobados"]},
-        {"nombre":"Ingeniería Textil","prerequisitos":["100 créditos aprobados"]},
-        {"nombre":"Investigación Operativa II","prerequisitos":["Investigación Operativa I"]},
-        {"nombre":"Planeamiento y Control de la Producción","prerequisitos":["Ingeniería de Costos y Presupuestos"]},
-        {"nombre":"Procesos Mineros y Metalúrgicos","prerequisitos":["100 créditos aprobados"]}
-      ],
-      "8": [
-        {"nombre":"Análisis de Decisiones I","prerequisitos":["Ingeniería Económica"]},
-        {"nombre":"Automatización y Control","prerequisitos":["Electrotecnia Industrial"]},
-        {"nombre":"Gestión de Mantenimiento","prerequisitos":["120 créditos aprobados"]},
-        {"nombre":"Gestión Energética","prerequisitos":["Termodinámica"]},
-        {"nombre":"Ingeniería del Producto","prerequisitos":["Innovación en Ingeniería"]},
-        {"nombre":"Investigación de Mercados","prerequisitos":["Marketing Industrial"]},
-        {"nombre":"Logística Integrada y Cadena de Abastecimientos","prerequisitos":["Planeamiento y Control de la Producción"]},
-        {"nombre":"Procesos Industriales III","prerequisitos":["120 créditos aprobados"]}
-      ],
-      "9": [
-        {"nombre":"Estrategias en la Industria","prerequisitos":["130 créditos aprobados"]},
-        {"nombre":"Análisis de Decisiones II","prerequisitos":["Análisis de Decisiones I"]},
-        {"nombre":"Diagnóstico Industrial","prerequisitos":["130 créditos aprobados"]},
-        {"nombre":"Gestión de Calidad","prerequisitos":["Control de Procesos"]},
-        {"nombre":"Ingeniería de Proyectos Industriales","prerequisitos":["Ingeniería del Producto"]},
-        {"nombre":"Manufactura Integrada","prerequisitos":["130 créditos aprobados"]},
-        {"nombre":"Marketing Estratégico","prerequisitos":["Marketing Industrial"]},
-        {"nombre":"Simulación de Sistemas","prerequisitos":["Investigación Operativa II"]}
-      ],
-      "10": [
-        {"nombre":"Seminario de Tesis","prerequisitos":["Metodología de la Investigación en Ingeniería"]},
-        {"nombre":"Dirección de Operaciones Industriales","prerequisitos":["160 créditos aprobados"]},
-        {"nombre":"Emprendimiento e Innovación","prerequisitos":["140 créditos aprobados"]},
-        {"nombre":"Gestión Ambiental","prerequisitos":["140 créditos aprobados"]},
-        {"nombre":"Gestión de Proyectos","prerequisitos":["Ingeniería de Proyectos Industriales"]},
-        {"nombre":"Gestión del Talento Humano","prerequisitos":["140 créditos aprobados"]},
-        {"nombre":"Ingeniería de Seguridad","prerequisitos":["Seguridad y Salud Ocupacional"]},
-        {"nombre":"Logística Internacional","prerequisitos":["Logística Integrada y Cadena de Abastecimientos"]}
-      ]
+      "1": [{"nombre":"Introducción a la Ingeniería Industrial","prerequisitos":[]},{"nombre":"Matemática","prerequisitos":[]},{"nombre":"Cálculo","prerequisitos":[]},{"nombre":"Dibujo Industrial I","prerequisitos":[]},{"nombre":"Identidad y Peruanidad","prerequisitos":[]},{"nombre":"Taller de Argumentación","prerequisitos":[]},{"nombre":"Taller de Artes","prerequisitos":[]}],
+      "2": [{"nombre":"Cálculo Integral","prerequisitos":["Cálculo"]},{"nombre":"Dibujo Industrial II","prerequisitos":["Dibujo Industrial I"]},{"nombre":"Química General","prerequisitos":[]},{"nombre":"Física","prerequisitos":[]},{"nombre":"Taller de Deportes","prerequisitos":[]},{"nombre":"Taller de Lectura y Redacción","prerequisitos":[]}],
+      "3": [{"nombre":"Física II","prerequisitos":["Física"]},{"nombre":"Cálculo Vectorial","prerequisitos":["Cálculo Integral"]},{"nombre":"Ingeniería de Organización Industrial","prerequisitos":[]},{"nombre":"Ciencias e Ingeniería de Materiales","prerequisitos":[]},{"nombre":"Metodología del Trabajo Universitario","prerequisitos":[]},{"nombre":"Responsabilidad Ciudadana y Ecología","prerequisitos":[]}],
+      "4": [{"nombre":"Procesos Industriales I","prerequisitos":["Ciencias e Ingeniería de Materiales"]},{"nombre":"Termodinámica","prerequisitos":["Química General"]},{"nombre":"Electrotecnia Industrial","prerequisitos":["Física II"]},{"nombre":"Estadística y Probabilidades","prerequisitos":["Matemática"]},{"nombre":"Innovación en Ingeniería","prerequisitos":["Metodología del Trabajo Universitario"]},{"nombre":"Taller de Bienestar y Felicidad","prerequisitos":[]},{"nombre":"Taller de Coaching y Liderazgo","prerequisitos":[]},{"nombre":"Taller de Inteligencia Emocional","prerequisitos":[]}],
+      "5": [{"nombre":"Procesos Industriales II","prerequisitos":["Procesos Industriales I"]},{"nombre":"Estudio del Trabajo","prerequisitos":["Introducción a la Ingeniería Industrial"]},{"nombre":"Computación Aplicada","prerequisitos":["50 créditos aprobados"]},{"nombre":"Filosofía y Ética","prerequisitos":[]},{"nombre":"Ingeniería de Costos y Presupuestos","prerequisitos":["Ingeniería de Organización Industrial"]},{"nombre":"Ingeniería Económica","prerequisitos":["55 créditos aprobados"]}],
+      "6": [{"nombre":"Sistemas de Organizaciones Industriales","prerequisitos":["60 créditos aprobados"]},{"nombre":"Estadística Aplicada a la Ingeniería Industrial","prerequisitos":["Estadística y Probabilidades"]},{"nombre":"Ingeniería de Plantas","prerequisitos":["Estudio del Trabajo"]},{"nombre":"Investigación Operativa I","prerequisitos":["Cálculo Vectorial"]},{"nombre":"Metodología de la Investigación en Ingeniería","prerequisitos":["Innovación en Ingeniería"]},{"nombre":"Tecnologías de Información","prerequisitos":["60 créditos aprobados"]}],
+      "7": [{"nombre":"Control de Procesos","prerequisitos":["Estadística Aplicada a la Ingeniería Industrial"]},{"nombre":"Marketing Industrial","prerequisitos":["100 créditos aprobados"]},{"nombre":"Seguridad y Salud Ocupacional","prerequisitos":["Sistemas de Organizaciones Industriales"]},{"nombre":"Ergonomía","prerequisitos":["100 créditos aprobados"]},{"nombre":"Ingeniería Textil","prerequisitos":["100 créditos aprobados"]},{"nombre":"Investigación Operativa II","prerequisitos":["Investigación Operativa I"]},{"nombre":"Planeamiento y Control de la Producción","prerequisitos":["Ingeniería de Costos y Presupuestos"]},{"nombre":"Procesos Mineros y Metalúrgicos","prerequisitos":["100 créditos aprobados"]}],
+      "8": [{"nombre":"Análisis de Decisiones I","prerequisitos":["Ingeniería Económica"]},{"nombre":"Automatización y Control","prerequisitos":["Electrotecnia Industrial"]},{"nombre":"Gestión de Mantenimiento","prerequisitos":["120 créditos aprobados"]},{"nombre":"Gestión Energética","prerequisitos":["Termodinámica"]},{"nombre":"Ingeniería del Producto","prerequisitos":["Innovación en Ingeniería"]},{"nombre":"Investigación de Mercados","prerequisitos":["Marketing Industrial"]},{"nombre":"Logística Integrada y Cadena de Abastecimientos","prerequisitos":["Planeamiento y Control de la Producción"]},{"nombre":"Procesos Industriales III","prerequisitos":["120 créditos aprobados"]}],
+      "9": [{"nombre":"Estrategias en la Industria","prerequisitos":["130 créditos aprobados"]},{"nombre":"Análisis de Decisiones II","prerequisitos":["Análisis de Decisiones I"]},{"nombre":"Diagnóstico Industrial","prerequisitos":["130 créditos aprobados"]},{"nombre":"Gestión de Calidad","prerequisitos":["Control de Procesos"]},{"nombre":"Ingeniería de Proyectos Industriales","prerequisitos":["Ingeniería del Producto"]},{"nombre":"Manufactura Integrada","prerequisitos":["130 créditos aprobados"]},{"nombre":"Marketing Estratégico","prerequisitos":["Marketing Industrial"]},{"nombre":"Simulación de Sistemas","prerequisitos":["Investigación Operativa II"]}],
+      "10": [{"nombre":"Seminario de Tesis","prerequisitos":["Metodología de la Investigación en Ingeniería"]},{"nombre":"Dirección de Operaciones Industriales","prerequisitos":["160 créditos aprobados"]},{"nombre":"Emprendimiento e Innovación","prerequisitos":["140 créditos aprobados"]},{"nombre":"Gestión Ambiental","prerequisitos":["140 créditos aprobados"]},{"nombre":"Gestión de Proyectos","prerequisitos":["Ingeniería de Proyectos Industriales"]},{"nombre":"Gestión del Talento Humano","prerequisitos":["140 créditos aprobados"]},{"nombre":"Ingeniería de Seguridad","prerequisitos":["Seguridad y Salud Ocupacional"]},{"nombre":"Logística Internacional","prerequisitos":["Logística Integrada y Cadena de Abastecimientos"]}]
     };
 
     const mallaData = __DATA__;
@@ -166,8 +88,16 @@
 
         btn.addEventListener('click', () => {
           if (!btn.classList.contains('locked')) {
-            btn.style.backgroundColor = '#d4f8d4'; // verde pastel
-            completados.add(curso.nombre);
+            // Toggle "completed" estado
+            if (btn.classList.contains('completed')) {
+              btn.classList.remove('completed');
+              completados.delete(curso.nombre);
+              btn.style.backgroundColor = '#fcd6ea'; // volver a rosa
+            } else {
+              btn.classList.add('completed');
+              completados.add(curso.nombre);
+              btn.style.backgroundColor = '#d0f0ff'; // celeste pastel
+            }
             desbloquearCursos();
           }
         });
@@ -188,6 +118,9 @@
               const desbloqueado = requisitos.every(r => completados.has(r) || r.includes('créditos'));
               if (desbloqueado) {
                 btn.classList.remove('locked');
+                if (!btn.classList.contains('completed')) {
+                  btn.style.backgroundColor = '#fcd6ea'; // rosa si aún no está marcado
+                }
               }
             }
           });
