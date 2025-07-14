@@ -57,6 +57,9 @@
 <body>
   <h1>Malla Visual Interactiva - Ingeniería Industrial</h1>
   <div class="grid" id="contenedor"></div>
+  <div style="text-align: center; margin-top: 1rem;">
+    <strong>Créditos aprobados:</strong> <span id="creditos-aprobados">0</span>
+  </div>
 
   <script>
 const malla = {
@@ -152,102 +155,102 @@ const malla = {
     { nombre: "Logística Internacional", tipo: "O", creditos: 3, prerequisitos: ["Logística Integrada y Cadena de Abastecimientos"] }
   ]
 };
-<script>
-  const completados = new Set();
-  const contenedor = document.getElementById("contenedor");
-  const creditosSpan = document.getElementById("creditos-aprobados");
-  const cursoElements = {};
+</script>
+ const completados = new Set();
+    const contenedor = document.getElementById("contenedor");
+    const creditosSpan = document.getElementById("creditos-aprobados");
+    const cursoElements = {};
 
-  function calcularCreditosAprobados() {
-    let total = 0;
-    for (const semestre in malla) {
-      for (const curso of malla[semestre]) {
-        if (completados.has(curso.nombre)) {
-          total += curso.creditos;
+    function calcularCreditosAprobados() {
+      let total = 0;
+      for (const semestre in malla) {
+        for (const curso of malla[semestre]) {
+          if (completados.has(curso.nombre)) {
+            total += curso.creditos;
+          }
         }
       }
+      return total;
     }
-    return total;
-  }
 
-  function renderMalla() {
-    for (let i = 1; i <= 10; i++) {
-      const col = document.createElement("div");
-      col.className = "semestre";
-      const titulo = document.createElement("h2");
-      titulo.textContent = `Semestre ${i}`;
-      col.appendChild(titulo);
+    function renderMalla() {
+      for (let i = 1; i <= 10; i++) {
+        const col = document.createElement("div");
+        col.className = "semestre";
+        const titulo = document.createElement("h2");
+        titulo.textContent = `Semestre ${i}`;
+        col.appendChild(titulo);
 
-      const electivos = malla[i]?.filter(c => c.tipo === "E") || [];
+        const electivos = malla[i]?.filter(c => c.tipo === "E") || [];
 
-      (malla[i] || []).forEach(curso => {
-        const div = document.createElement("div");
-        div.className = "curso";
-        div.textContent = `${curso.nombre} (${curso.creditos} cr)`;
-        cursoElements[curso.nombre] = div;
+        (malla[i] || []).forEach(curso => {
+          const div = document.createElement("div");
+          div.className = "curso";
+          div.textContent = `${curso.nombre} (${curso.creditos} cr)`;
+          cursoElements[curso.nombre] = div;
 
-        div.addEventListener("click", () => {
-          if (!div.classList.contains("desbloqueado")) return;
+          div.addEventListener("click", () => {
+            if (!div.classList.contains("desbloqueado")) return;
 
-          // Electivos: solo uno puede estar aprobado
-          if (curso.tipo === "E") {
-            if (!div.classList.contains("aprobado")) {
-              electivos.forEach(c => {
-                if (c.nombre !== curso.nombre) {
-                  const el = cursoElements[c.nombre];
-                  el.classList.remove("aprobado");
-                  completados.delete(c.nombre);
-                }
-              });
+            // Electivos: solo uno puede estar aprobado
+            if (curso.tipo === "E") {
+              if (!div.classList.contains("aprobado")) {
+                electivos.forEach(c => {
+                  if (c.nombre !== curso.nombre) {
+                    const el = cursoElements[c.nombre];
+                    el.classList.remove("aprobado");
+                    completados.delete(c.nombre);
+                  }
+                });
+              }
             }
-          }
 
-          // Toggle aprobado
-          div.classList.toggle("aprobado");
-          if (div.classList.contains("aprobado")) {
-            completados.add(curso.nombre);
-          } else {
-            completados.delete(curso.nombre);
-          }
+            div.classList.toggle("aprobado");
+            if (div.classList.contains("aprobado")) {
+              completados.add(curso.nombre);
+            } else {
+              completados.delete(curso.nombre);
+            }
 
-          creditosSpan.textContent = calcularCreditosAprobados();
-          actualizarDesbloqueo();
+            creditosSpan.textContent = calcularCreditosAprobados();
+            actualizarDesbloqueo();
+          });
+
+          col.appendChild(div);
         });
 
-        col.appendChild(div);
-      });
+        contenedor.appendChild(col);
+      }
 
-      contenedor.appendChild(col);
+      actualizarDesbloqueo();
+      creditosSpan.textContent = calcularCreditosAprobados();
     }
 
-    actualizarDesbloqueo();
-    creditosSpan.textContent = calcularCreditosAprobados();
-  }
+    function actualizarDesbloqueo() {
+      const creditos = calcularCreditosAprobados();
+      for (let semestre in malla) {
+        malla[semestre].forEach(curso => {
+          const div = cursoElements[curso.nombre];
+          const desbloqueado = curso.prerequisitos.every(pre => {
+            if (pre.includes("créditos")) {
+              const match = pre.match(/(\d+)/);
+              return creditos >= parseInt(match[1]);
+            }
+            return completados.has(pre);
+          });
 
-  function actualizarDesbloqueo() {
-    const creditos = calcularCreditosAprobados();
-    for (let semestre in malla) {
-      malla[semestre].forEach(curso => {
-        const div = cursoElements[curso.nombre];
-        const desbloqueado = curso.prerequisitos.every(pre => {
-          if (pre.includes("créditos")) {
-            const match = pre.match(/(\d+)/);
-            return creditos >= parseInt(match[1]);
+          if (desbloqueado && !div.classList.contains("aprobado")) {
+            div.classList.add("desbloqueado");
+            div.style.cursor = "pointer";
+          } else if (!div.classList.contains("aprobado")) {
+            div.classList.remove("desbloqueado");
+            div.style.cursor = "not-allowed";
           }
-          return completados.has(pre);
         });
-
-        if (desbloqueado && !div.classList.contains("aprobado")) {
-          div.classList.add("desbloqueado");
-          div.style.cursor = "pointer";
-        } else if (!div.classList.contains("aprobado")) {
-          div.classList.remove("desbloqueado");
-          div.style.cursor = "not-allowed";
-        }
-      });
+      }
     }
-  }
 
-  renderMalla();
-</script>
-
+    renderMalla();
+  </script>
+</body>
+</html>
