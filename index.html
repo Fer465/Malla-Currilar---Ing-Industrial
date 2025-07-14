@@ -2,13 +2,12 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Malla Interactiva - Ingeniería Industrial</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Malla Visual Interactiva - Ing. Industrial</title>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
       background-color: #fff7fc;
-      color: #333;
+      font-family: 'Segoe UI', sans-serif;
       margin: 0;
       padding: 2rem;
     }
@@ -16,119 +15,77 @@
       text-align: center;
       color: #c85ca3;
     }
-    .semester {
-      background-color: #ffe5f1;
-      border: 1px solid #f5a4d1;
-      border-radius: 12px;
-      padding: 1rem;
-      margin: 1rem 0;
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 1rem;
+      margin-top: 2rem;
     }
-    .semester h2 {
+    .semestre {
+      background-color: #ffe5f1;
+      padding: 1rem;
+      border-radius: 12px;
+      border: 1px solid #f5a4d1;
+    }
+    .semestre h2 {
       margin-top: 0;
       color: #b34b90;
+      text-align: center;
     }
-    .course-button {
-      display: block;
-      width: 100%;
-      text-align: left;
-      background-color: #fcd6ea; /* rosa disponible */
+    .curso {
+      background-color: #fcd6ea;
       border: 2px solid #f5a4d1;
       border-radius: 8px;
-      padding: 0.5rem 1rem;
-      margin: 0.4rem 0;
+      padding: 0.4rem;
+      margin: 0.3rem 0;
       cursor: pointer;
       transition: background-color 0.3s ease;
     }
-    .course-button.locked {
-      background-color: #eee !important;
-      border-color: #ccc;
-      color: #999;
-      cursor: not-allowed;
-    }
-    .course-button.completed {
-      background-color: #d0f0ff !important; /* celeste pastel */
+    .curso.aprobado {
+      background-color: #d0f0ff !important;
+      border-color: #7ac9e6;
     }
   </style>
 </head>
 <body>
-  <h1>Malla Interactiva - Ingeniería Industrial</h1>
-  <div id="malla-container"></div>
+  <h1>Malla Visual Interactiva - Ingeniería Industrial</h1>
+  <div class="grid" id="contenedor"></div>
 
   <script>
-    const __DATA__ = {
-      "1": [{"nombre":"Introducción a la Ingeniería Industrial","prerequisitos":[]},{"nombre":"Matemática","prerequisitos":[]},{"nombre":"Cálculo","prerequisitos":[]},{"nombre":"Dibujo Industrial I","prerequisitos":[]},{"nombre":"Identidad y Peruanidad","prerequisitos":[]},{"nombre":"Taller de Argumentación","prerequisitos":[]},{"nombre":"Taller de Artes","prerequisitos":[]}],
-      "2": [{"nombre":"Cálculo Integral","prerequisitos":["Cálculo"]},{"nombre":"Dibujo Industrial II","prerequisitos":["Dibujo Industrial I"]},{"nombre":"Química General","prerequisitos":[]},{"nombre":"Física","prerequisitos":[]},{"nombre":"Taller de Deportes","prerequisitos":[]},{"nombre":"Taller de Lectura y Redacción","prerequisitos":[]}],
-      "3": [{"nombre":"Física II","prerequisitos":["Física"]},{"nombre":"Cálculo Vectorial","prerequisitos":["Cálculo Integral"]},{"nombre":"Ingeniería de Organización Industrial","prerequisitos":[]},{"nombre":"Ciencias e Ingeniería de Materiales","prerequisitos":[]},{"nombre":"Metodología del Trabajo Universitario","prerequisitos":[]},{"nombre":"Responsabilidad Ciudadana y Ecología","prerequisitos":[]}],
-      "4": [{"nombre":"Procesos Industriales I","prerequisitos":["Ciencias e Ingeniería de Materiales"]},{"nombre":"Termodinámica","prerequisitos":["Química General"]},{"nombre":"Electrotecnia Industrial","prerequisitos":["Física II"]},{"nombre":"Estadística y Probabilidades","prerequisitos":["Matemática"]},{"nombre":"Innovación en Ingeniería","prerequisitos":["Metodología del Trabajo Universitario"]},{"nombre":"Taller de Bienestar y Felicidad","prerequisitos":[]},{"nombre":"Taller de Coaching y Liderazgo","prerequisitos":[]},{"nombre":"Taller de Inteligencia Emocional","prerequisitos":[]}],
-      "5": [{"nombre":"Procesos Industriales II","prerequisitos":["Procesos Industriales I"]},{"nombre":"Estudio del Trabajo","prerequisitos":["Introducción a la Ingeniería Industrial"]},{"nombre":"Computación Aplicada","prerequisitos":["50 créditos aprobados"]},{"nombre":"Filosofía y Ética","prerequisitos":[]},{"nombre":"Ingeniería de Costos y Presupuestos","prerequisitos":["Ingeniería de Organización Industrial"]},{"nombre":"Ingeniería Económica","prerequisitos":["55 créditos aprobados"]}],
-      "6": [{"nombre":"Sistemas de Organizaciones Industriales","prerequisitos":["60 créditos aprobados"]},{"nombre":"Estadística Aplicada a la Ingeniería Industrial","prerequisitos":["Estadística y Probabilidades"]},{"nombre":"Ingeniería de Plantas","prerequisitos":["Estudio del Trabajo"]},{"nombre":"Investigación Operativa I","prerequisitos":["Cálculo Vectorial"]},{"nombre":"Metodología de la Investigación en Ingeniería","prerequisitos":["Innovación en Ingeniería"]},{"nombre":"Tecnologías de Información","prerequisitos":["60 créditos aprobados"]}],
-      "7": [{"nombre":"Control de Procesos","prerequisitos":["Estadística Aplicada a la Ingeniería Industrial"]},{"nombre":"Marketing Industrial","prerequisitos":["100 créditos aprobados"]},{"nombre":"Seguridad y Salud Ocupacional","prerequisitos":["Sistemas de Organizaciones Industriales"]},{"nombre":"Ergonomía","prerequisitos":["100 créditos aprobados"]},{"nombre":"Ingeniería Textil","prerequisitos":["100 créditos aprobados"]},{"nombre":"Investigación Operativa II","prerequisitos":["Investigación Operativa I"]},{"nombre":"Planeamiento y Control de la Producción","prerequisitos":["Ingeniería de Costos y Presupuestos"]},{"nombre":"Procesos Mineros y Metalúrgicos","prerequisitos":["100 créditos aprobados"]}],
-      "8": [{"nombre":"Análisis de Decisiones I","prerequisitos":["Ingeniería Económica"]},{"nombre":"Automatización y Control","prerequisitos":["Electrotecnia Industrial"]},{"nombre":"Gestión de Mantenimiento","prerequisitos":["120 créditos aprobados"]},{"nombre":"Gestión Energética","prerequisitos":["Termodinámica"]},{"nombre":"Ingeniería del Producto","prerequisitos":["Innovación en Ingeniería"]},{"nombre":"Investigación de Mercados","prerequisitos":["Marketing Industrial"]},{"nombre":"Logística Integrada y Cadena de Abastecimientos","prerequisitos":["Planeamiento y Control de la Producción"]},{"nombre":"Procesos Industriales III","prerequisitos":["120 créditos aprobados"]}],
-      "9": [{"nombre":"Estrategias en la Industria","prerequisitos":["130 créditos aprobados"]},{"nombre":"Análisis de Decisiones II","prerequisitos":["Análisis de Decisiones I"]},{"nombre":"Diagnóstico Industrial","prerequisitos":["130 créditos aprobados"]},{"nombre":"Gestión de Calidad","prerequisitos":["Control de Procesos"]},{"nombre":"Ingeniería de Proyectos Industriales","prerequisitos":["Ingeniería del Producto"]},{"nombre":"Manufactura Integrada","prerequisitos":["130 créditos aprobados"]},{"nombre":"Marketing Estratégico","prerequisitos":["Marketing Industrial"]},{"nombre":"Simulación de Sistemas","prerequisitos":["Investigación Operativa II"]}],
-      "10": [{"nombre":"Seminario de Tesis","prerequisitos":["Metodología de la Investigación en Ingeniería"]},{"nombre":"Dirección de Operaciones Industriales","prerequisitos":["160 créditos aprobados"]},{"nombre":"Emprendimiento e Innovación","prerequisitos":["140 créditos aprobados"]},{"nombre":"Gestión Ambiental","prerequisitos":["140 créditos aprobados"]},{"nombre":"Gestión de Proyectos","prerequisitos":["Ingeniería de Proyectos Industriales"]},{"nombre":"Gestión del Talento Humano","prerequisitos":["140 créditos aprobados"]},{"nombre":"Ingeniería de Seguridad","prerequisitos":["Seguridad y Salud Ocupacional"]},{"nombre":"Logística Internacional","prerequisitos":["Logística Integrada y Cadena de Abastecimientos"]}]
+    const malla = {
+      1: ["Intro a Ing. Industrial", "Matemática", "Cálculo", "Dibujo Industrial I", "Identidad y Peruanidad", "Taller de Argumentación", "Taller de Artes"],
+      2: ["Cálculo Integral", "Dibujo Industrial II", "Química General", "Física", "Taller de Deportes", "Taller de Lectura y Redacción"],
+      3: ["Física II", "Cálculo Vectorial", "Ing. Organización Industrial", "Materiales", "Metodología del Trabajo Univ.", "Responsabilidad Ciudadana"],
+      4: ["Procesos Industriales I", "Termodinámica", "Electrotecnia", "Estadística y Probabilidades", "Innovación", "Bienestar", "Coaching", "Inteligencia Emocional"],
+      5: ["Procesos Industriales II", "Estudio del Trabajo", "Computación", "Filosofía", "Costos y Presupuestos", "Ing. Económica"],
+      6: ["Sistemas Industriales", "Estadística Aplicada", "Ing. de Plantas", "IO I", "Metodología de la Investigación", "TI"],
+      7: ["Control de Procesos", "Marketing Industrial", "Seguridad y Salud", "Ergonomía", "Ing. Textil", "IO II", "PCP", "Procesos Mineros"],
+      8: ["Análisis Decisiones I", "Automatización", "Mantenimiento", "Gestión Energética", "Ing. Producto", "Invest. de Mercados", "Logística", "Procesos III"],
+      9: ["Estrategias Industriales", "Análisis Decisiones II", "Diagnóstico", "Calidad", "Proyectos Industriales", "Manufactura", "Marketing Estratégico", "Simulación"],
+      10: ["Seminario Tesis", "Dir. Operaciones", "Emprendimiento", "Gestión Ambiental", "Gestión Proyectos", "Talento Humano", "Seguridad Industrial", "Logística Internacional"]
     };
 
-    const mallaData = __DATA__;
-    const container = document.getElementById('malla-container');
-    const completados = new Set();
+    const contenedor = document.getElementById("contenedor");
 
-    for (const [semestre, cursos] of Object.entries(mallaData)) {
-      const yearDiv = document.createElement('div');
-      yearDiv.className = 'semester';
-      const semNum = parseInt(semestre);
-      const yearNum = Math.ceil(semNum / 2);
-      yearDiv.innerHTML = `<h2>Año ${yearNum} - Semestre ${semNum}</h2>`;
+    for (let i = 1; i <= 10; i++) {
+      const col = document.createElement("div");
+      col.className = "semestre";
+      const titulo = document.createElement("h2");
+      titulo.textContent = `Semestre ${i}`;
+      col.appendChild(titulo);
 
-      cursos.forEach((curso, index) => {
-        const id = `sem${semNum}-curso${index}`;
-        const btn = document.createElement('button');
-        btn.className = 'course-button locked';
-        btn.textContent = curso.nombre;
-        btn.id = id;
-
-        btn.addEventListener('click', () => {
-          if (!btn.classList.contains('locked')) {
-            // Toggle "completed" estado
-            if (btn.classList.contains('completed')) {
-              btn.classList.remove('completed');
-              completados.delete(curso.nombre);
-              btn.style.backgroundColor = '#fcd6ea'; // volver a rosa
-            } else {
-              btn.classList.add('completed');
-              completados.add(curso.nombre);
-              btn.style.backgroundColor = '#d0f0ff'; // celeste pastel
-            }
-            desbloquearCursos();
-          }
+      malla[i].forEach(curso => {
+        const div = document.createElement("div");
+        div.className = "curso";
+        div.textContent = curso;
+        div.addEventListener("click", () => {
+          div.classList.toggle("aprobado");
         });
-
-        yearDiv.appendChild(btn);
+        col.appendChild(div);
       });
 
-      container.appendChild(yearDiv);
+      contenedor.appendChild(col);
     }
-
-    function desbloquearCursos() {
-      document.querySelectorAll('.course-button').forEach(btn => {
-        const cursoNombre = btn.textContent.trim();
-        for (const cursos of Object.values(mallaData)) {
-          cursos.forEach(curso => {
-            if (curso.nombre === cursoNombre) {
-              const requisitos = curso.prerequisitos;
-              const desbloqueado = requisitos.every(r => completados.has(r) || r.includes('créditos'));
-              if (desbloqueado) {
-                btn.classList.remove('locked');
-                if (!btn.classList.contains('completed')) {
-                  btn.style.backgroundColor = '#fcd6ea'; // rosa si aún no está marcado
-                }
-              }
-            }
-          });
-        }
-      });
-    }
-
-    desbloquearCursos();
   </script>
 </body>
 </html>
