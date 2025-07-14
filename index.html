@@ -132,4 +132,70 @@
         {"nombre":"Ingeniería de Proyectos Industriales","prerequisitos":["Ingeniería del Producto"]},
         {"nombre":"Manufactura Integrada","prerequisitos":["130 créditos aprobados"]},
         {"nombre":"Marketing Estratégico","prerequisitos":["Marketing Industrial"]},
-        {"nomb
+        {"nombre":"Simulación de Sistemas","prerequisitos":["Investigación Operativa II"]}
+      ],
+      "10": [
+        {"nombre":"Seminario de Tesis","prerequisitos":["Metodología de la Investigación en Ingeniería"]},
+        {"nombre":"Dirección de Operaciones Industriales","prerequisitos":["160 créditos aprobados"]},
+        {"nombre":"Emprendimiento e Innovación","prerequisitos":["140 créditos aprobados"]},
+        {"nombre":"Gestión Ambiental","prerequisitos":["140 créditos aprobados"]},
+        {"nombre":"Gestión de Proyectos","prerequisitos":["Ingeniería de Proyectos Industriales"]},
+        {"nombre":"Gestión del Talento Humano","prerequisitos":["140 créditos aprobados"]},
+        {"nombre":"Ingeniería de Seguridad","prerequisitos":["Seguridad y Salud Ocupacional"]},
+        {"nombre":"Logística Internacional","prerequisitos":["Logística Integrada y Cadena de Abastecimientos"]}
+      ]
+    };
+
+    const mallaData = __DATA__;
+    const container = document.getElementById('malla-container');
+    const completados = new Set();
+
+    for (const [semestre, cursos] of Object.entries(mallaData)) {
+      const yearDiv = document.createElement('div');
+      yearDiv.className = 'semester';
+      const semNum = parseInt(semestre);
+      const yearNum = Math.ceil(semNum / 2);
+      yearDiv.innerHTML = `<h2>Año ${yearNum} - Semestre ${semNum}</h2>`;
+
+      cursos.forEach((curso, index) => {
+        const id = `sem${semNum}-curso${index}`;
+        const btn = document.createElement('button');
+        btn.className = 'course-button locked';
+        btn.textContent = curso.nombre;
+        btn.id = id;
+
+        btn.addEventListener('click', () => {
+          if (!btn.classList.contains('locked')) {
+            btn.style.backgroundColor = '#d4f8d4'; // verde pastel
+            completados.add(curso.nombre);
+            desbloquearCursos();
+          }
+        });
+
+        yearDiv.appendChild(btn);
+      });
+
+      container.appendChild(yearDiv);
+    }
+
+    function desbloquearCursos() {
+      document.querySelectorAll('.course-button').forEach(btn => {
+        const cursoNombre = btn.textContent.trim();
+        for (const cursos of Object.values(mallaData)) {
+          cursos.forEach(curso => {
+            if (curso.nombre === cursoNombre) {
+              const requisitos = curso.prerequisitos;
+              const desbloqueado = requisitos.every(r => completados.has(r) || r.includes('créditos'));
+              if (desbloqueado) {
+                btn.classList.remove('locked');
+              }
+            }
+          });
+        }
+      });
+    }
+
+    desbloquearCursos();
+  </script>
+</body>
+</html>
