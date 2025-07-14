@@ -60,10 +60,10 @@
   <div style="text-align: center; margin-top: 1rem;">
     <strong>Créditos aprobados:</strong> <span id="creditos-aprobados">0</span>
   </div>
-  
+
   <script>
-const malla = {
-  1: [
+    const malla = {
+1: [
     { nombre: "Introducción a la Ingeniería Industrial", tipo: "N", creditos: 3, prerequisitos: [] },
     { nombre: "Matemática", tipo: "N", creditos: 4, prerequisitos: [] },
     { nombre: "Cálculo", tipo: "N", creditos: 4, prerequisitos: [] },
@@ -153,11 +153,9 @@ const malla = {
     { nombre: "Gestión del Talento Humano", tipo: "E", creditos: 3, prerequisitos: ["140 créditos aprobados"] },
     { nombre: "Ingeniería de Seguridad", tipo: "E", creditos: 3, prerequisitos: ["Seguridad y Salud Ocupacional"] },
     { nombre: "Logística Internacional", tipo: "O", creditos: 3, prerequisitos: ["Logística Integrada y Cadena de Abastecimientos"] }
-  ]
-};
-    
-</script>
- const completados = new Set();
+  ]    };
+
+    const completados = new Set();
     const contenedor = document.getElementById("contenedor");
     const creditosSpan = document.getElementById("creditos-aprobados");
     const cursoElements = {};
@@ -192,6 +190,7 @@ const malla = {
 
           div.addEventListener("click", () => {
             if (!div.classList.contains("desbloqueado")) return;
+
             if (curso.tipo === "E") {
               if (!div.classList.contains("aprobado")) {
                 electivos.forEach(c => {
@@ -203,6 +202,7 @@ const malla = {
                 });
               }
             }
+
             div.classList.toggle("aprobado");
             if (div.classList.contains("aprobado")) {
               completados.add(curso.nombre);
