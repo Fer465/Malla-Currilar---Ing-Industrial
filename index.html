@@ -33,17 +33,24 @@
       text-align: center;
     }
     .curso {
-      background-color: #fcd6ea;
-      border: 2px solid #f5a4d1;
+      background-color: #ddd; /* gris inicial */
+      border: 2px solid #ccc;
       border-radius: 8px;
       padding: 0.4rem;
       margin: 0.3rem 0;
+      cursor: not-allowed;
+      transition: background-color 0.3s ease, text-decoration 0.3s ease;
+      color: #666;
+    }
+    .curso.desbloqueado {
+      background-color: #fcd6ea; /* rosa claro */
+      color: #000;
       cursor: pointer;
-      transition: background-color 0.3s ease;
     }
     .curso.aprobado {
-      background-color: #d0f0ff !important;
+      background-color: #d0f0ff !important; /* celeste pastel */
       border-color: #7ac9e6;
+      text-decoration: line-through;
     }
   </style>
 </head>
@@ -53,39 +60,80 @@
 
   <script>
     const malla = {
-      1: ["Intro a Ing. Industrial", "Matemática", "Cálculo", "Dibujo Industrial I", "Identidad y Peruanidad", "Taller de Argumentación", "Taller de Artes"],
-      2: ["Cálculo Integral", "Dibujo Industrial II", "Química General", "Física", "Taller de Deportes", "Taller de Lectura y Redacción"],
-      3: ["Física II", "Cálculo Vectorial", "Ing. Organización Industrial", "Materiales", "Metodología del Trabajo Univ.", "Responsabilidad Ciudadana"],
-      4: ["Procesos Industriales I", "Termodinámica", "Electrotecnia", "Estadística y Probabilidades", "Innovación", "Bienestar", "Coaching", "Inteligencia Emocional"],
-      5: ["Procesos Industriales II", "Estudio del Trabajo", "Computación", "Filosofía", "Costos y Presupuestos", "Ing. Económica"],
-      6: ["Sistemas Industriales", "Estadística Aplicada", "Ing. de Plantas", "IO I", "Metodología de la Investigación", "TI"],
-      7: ["Control de Procesos", "Marketing Industrial", "Seguridad y Salud", "Ergonomía", "Ing. Textil", "IO II", "PCP", "Procesos Mineros"],
-      8: ["Análisis Decisiones I", "Automatización", "Mantenimiento", "Gestión Energética", "Ing. Producto", "Invest. de Mercados", "Logística", "Procesos III"],
-      9: ["Estrategias Industriales", "Análisis Decisiones II", "Diagnóstico", "Calidad", "Proyectos Industriales", "Manufactura", "Marketing Estratégico", "Simulación"],
-      10: ["Seminario Tesis", "Dir. Operaciones", "Emprendimiento", "Gestión Ambiental", "Gestión Proyectos", "Talento Humano", "Seguridad Industrial", "Logística Internacional"]
+      1: [
+        { nombre: "Intro a Ing. Industrial", prerequisitos: [] },
+        { nombre: "Matemática", prerequisitos: [] },
+        { nombre: "Cálculo", prerequisitos: [] },
+        { nombre: "Dibujo Industrial I", prerequisitos: [] },
+        { nombre: "Identidad y Peruanidad", prerequisitos: [] },
+        { nombre: "Taller de Argumentación", prerequisitos: [] },
+        { nombre: "Taller de Artes", prerequisitos: [] }
+      ],
+      2: [
+        { nombre: "Cálculo Integral", prerequisitos: ["Cálculo"] },
+        { nombre: "Dibujo Industrial II", prerequisitos: ["Dibujo Industrial I"] },
+        { nombre: "Química General", prerequisitos: [] },
+        { nombre: "Física", prerequisitos: [] },
+        { nombre: "Taller de Deportes", prerequisitos: [] },
+        { nombre: "Taller de Lectura y Redacción", prerequisitos: [] }
+      ]
+      // Puedes seguir agregando más semestres aquí...
     };
 
+    const completados = new Set();
     const contenedor = document.getElementById("contenedor");
+    const cursoElements = {};
 
-    for (let i = 1; i <= 10; i++) {
-      const col = document.createElement("div");
-      col.className = "semestre";
-      const titulo = document.createElement("h2");
-      titulo.textContent = `Semestre ${i}`;
-      col.appendChild(titulo);
+    function renderMalla() {
+      for (let i = 1; i <= 10; i++) {
+        const col = document.createElement("div");
+        col.className = "semestre";
+        const titulo = document.createElement("h2");
+        titulo.textContent = `Semestre ${i}`;
+        col.appendChild(titulo);
 
-      malla[i].forEach(curso => {
-        const div = document.createElement("div");
-        div.className = "curso";
-        div.textContent = curso;
-        div.addEventListener("click", () => {
-          div.classList.toggle("aprobado");
+        (malla[i] || []).forEach(curso => {
+          const div = document.createElement("div");
+          div.className = "curso";
+          div.textContent = curso.nombre;
+          cursoElements[curso.nombre] = div;
+
+          div.addEventListener("click", () => {
+            if (!div.classList.contains("desbloqueado")) return;
+            div.classList.toggle("aprobado");
+            if (div.classList.contains("aprobado")) {
+              completados.add(curso.nombre);
+            } else {
+              completados.delete(curso.nombre);
+            }
+            actualizarDesbloqueo();
+          });
+
+          col.appendChild(div);
         });
-        col.appendChild(div);
-      });
 
-      contenedor.appendChild(col);
+        contenedor.appendChild(col);
+      }
+      actualizarDesbloqueo();
     }
+
+    function actualizarDesbloqueo() {
+      for (let semestre in malla) {
+        malla[semestre].forEach(curso => {
+          const div = cursoElements[curso.nombre];
+          const desbloqueado = curso.prerequisitos.every(pre => completados.has(pre));
+          if (desbloqueado && !div.classList.contains("aprobado")) {
+            div.classList.add("desbloqueado");
+            div.style.cursor = "pointer";
+          } else if (!div.classList.contains("aprobado")) {
+            div.classList.remove("desbloqueado");
+            div.style.cursor = "not-allowed";
+          }
+        });
+      }
+    }
+
+    renderMalla();
   </script>
 </body>
 </html>
