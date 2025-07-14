@@ -60,7 +60,7 @@
   <div style="text-align: center; margin-top: 1rem;">
     <strong>Créditos aprobados:</strong> <span id="creditos-aprobados">0</span>
   </div>
-
+  
   <script>
 const malla = {
   1: [
@@ -156,7 +156,8 @@ const malla = {
   ]
 };
 </script>
- const completados = new Set();
+
+  const completados = new Set();
     const contenedor = document.getElementById("contenedor");
     const creditosSpan = document.getElementById("creditos-aprobados");
     const cursoElements = {};
@@ -190,9 +191,8 @@ const malla = {
           cursoElements[curso.nombre] = div;
 
           div.addEventListener("click", () => {
-            if (!div.classList.contains("desbloqueado")) return;
+            if (!div.classList.contains("desbloqueado") && !div.classList.contains("aprobado")) return;
 
-            // Electivos: solo uno puede estar aprobado
             if (curso.tipo === "E") {
               if (!div.classList.contains("aprobado")) {
                 electivos.forEach(c => {
