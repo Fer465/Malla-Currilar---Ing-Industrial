@@ -156,8 +156,7 @@ const malla = {
   ]
 };
 </script>
-
-  const completados = new Set();
+ const completados = new Set();
     const contenedor = document.getElementById("contenedor");
     const creditosSpan = document.getElementById("creditos-aprobados");
     const cursoElements = {};
@@ -191,8 +190,7 @@ const malla = {
           cursoElements[curso.nombre] = div;
 
           div.addEventListener("click", () => {
-            if (!div.classList.contains("desbloqueado") && !div.classList.contains("aprobado")) return;
-
+            if (!div.classList.contains("desbloqueado")) return;
             if (curso.tipo === "E") {
               if (!div.classList.contains("aprobado")) {
                 electivos.forEach(c => {
@@ -204,14 +202,12 @@ const malla = {
                 });
               }
             }
-
             div.classList.toggle("aprobado");
             if (div.classList.contains("aprobado")) {
               completados.add(curso.nombre);
             } else {
               completados.delete(curso.nombre);
             }
-
             creditosSpan.textContent = calcularCreditosAprobados();
             actualizarDesbloqueo();
           });
@@ -221,7 +217,6 @@ const malla = {
 
         contenedor.appendChild(col);
       }
-
       actualizarDesbloqueo();
       creditosSpan.textContent = calcularCreditosAprobados();
     }
@@ -238,7 +233,6 @@ const malla = {
             }
             return completados.has(pre);
           });
-
           if (desbloqueado && !div.classList.contains("aprobado")) {
             div.classList.add("desbloqueado");
             div.style.cursor = "pointer";
